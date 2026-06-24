@@ -12,15 +12,18 @@ jobs:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false # Prevents one OS failure from cancelling the others
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
-            executable: gh_tree
+            build_file: gh_tree
+            release_file: gh_tree_linux_amd64
           - os: macos-latest
-            executable: gh_tree
+            build_file: gh_tree
+            release_file: gh_tree_macos_arm64
           - os: windows-latest
-            executable: gh_tree.exe
+            build_file: gh_tree.exe
+            release_file: gh_tree_windows_x64.exe
 
     steps:
       - name: Checkout Code
@@ -62,9 +65,13 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
           ninja
 
+      - name: Rename Binary for Release
+        shell: bash
+        run: mv build/${{ matrix.build_file }} build/${{ matrix.release_file }}
+
       - name: Upload Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/${{ matrix.executable }}
+          files: build/${{ matrix.release_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
