@@ -18,11 +18,11 @@ Requires CMake, a C++17 compiler, and libcurl.
 3. ninja
 
 ## Usage
-Basic usage:
+Basic usage:  
   ./gh_tree.exe <owner> <repo>
 
-Authenticated usage:
-  export GITHUB_TOKEN="your_token_here"
+Authenticated usage:  
+  export GITHUB_TOKEN="your_token_here"  
   ./gh_tree.exe <owner> <repo>
 
 ## Dependencies
